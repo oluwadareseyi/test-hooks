@@ -1,9 +1,19 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
+import React from "react";
+import { shallow } from "enzyme";
+import App from "./App";
+import { checkElement } from "../test/testUtils";
+/**
+ * @function setup
+ * @param  {Object} initialState={} - The initial state we would like to test with.
+ * @returns {ShallowWrapper} - THe component wrapper.
+ */
+const setup = (initialState = {}) => {
+  return shallow(<App {...initialState} />);
+};
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+describe("app render", () => {
+  test("renders without error", () => {
+    const wrapper = setup();
+    checkElement(wrapper, "app-component");
+  });
 });
