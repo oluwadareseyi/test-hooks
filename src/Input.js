@@ -12,7 +12,7 @@ const Input = ({ secretWord }) => {
   const submitHandler = () => {
     // TODO: update guessedWords
     // TODO: check against secretWord and update success if needed.
-    // setCurrentGuess("");
+    setCurrentGuess("");
   };
   return (
     <div data-test="input-component">
