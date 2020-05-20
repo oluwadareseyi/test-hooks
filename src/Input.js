@@ -9,9 +9,10 @@ import PropTypes from "prop-types";
 const Input = ({ secretWord }) => {
   const [currentGuess, setCurrentGuess] = React.useState("");
 
-  const submitHandler = () => {
+  const submitHandler = (e) => {
     // TODO: update guessedWords
     // TODO: check against secretWord and update success if needed.
+    e.preventDefault();
     setCurrentGuess("");
   };
   return (
@@ -29,7 +30,7 @@ const Input = ({ secretWord }) => {
         />
         <button
           data-test="submit-button"
-          onClick={submitHandler}
+          onClick={(e) => submitHandler(e)}
           className="btn btn-primary mb-2"
           type="submit"
         >

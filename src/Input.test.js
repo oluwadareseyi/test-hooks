@@ -23,11 +23,11 @@ describe("Input component", () => {
 });
 
 describe("state controlled input field", () => {
-  let mockSetCurrentGuess;
+  let mockSetCurrentGuess = jest.fn();
   let wrapper;
   beforeEach(() => {
     // Create a mock function for the setCurrentGuess function that updates the state.
-    mockSetCurrentGuess = jest.fn();
+    mockSetCurrentGuess.mockClear();
 
     // Set up useState using React, it is a function that accepts one parameter and returns an array of two items: The initial State and a function to update it. So we make it a mock function that takes in an anonymous function and returns an Array with the same items, initial state and function.
     React.useState = jest.fn(() => ["", mockSetCurrentGuess]);
@@ -52,7 +52,8 @@ describe("state controlled input field", () => {
   test("state is cleared on button click", () => {
     const button = wrapper.find("[data-test='submit-button']");
 
-    button.simulate("click");
+    // simulate a button click and add a dummy preventDefault function so no error is thrown.
+    button.simulate("click", { preventDefault() {} });
 
     expect(mockSetCurrentGuess).toHaveBeenCalledWith("");
   });
