@@ -42,17 +42,17 @@ describe("getSecretWord calls", () => {
   test("secretWord does not update on app update", () => {
     const wrapper = setup();
 
+    // clear the mock to reset the App component after initial mount.
+    mockGetSecretWord.mockClear();
+    wrapper.setProps();
+
+    expect(mockGetSecretWord).not.toHaveBeenCalled();
+
     // const mockUseEffect = jest.fn();
 
     // React.useEffect = mockUseEffect;
 
     // mockUseEffect.mockClear();
     // wrapper.setProps();
-
-    // clear the mock to reset the App component after initial mount.
-    mockGetSecretWord.mockClear();
-    wrapper.setProps();
-
-    expect(mockGetSecretWord).not.toHaveBeenCalled();
   });
 });
