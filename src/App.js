@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
-import hookActions from './actions/hookActions';
+import hookActions from "./actions/hookActions";
+import Input from "./Input";
 
 /**
  * @function reducer - Function to update state based on the action argumnent type.
@@ -32,12 +33,19 @@ const App = () => {
   };
 
   React.useEffect(() => {
-    hookActions.getSecretWord(setSecretWord)
+    hookActions.getSecretWord(setSecretWord);
   }, []);
 
-  return (
+  return !state.secretWord ? (
+    <div className="container" data-test="spinner">
+      <div className="spinner-border" role="status">
+        <span className="sr-only">loading...</span>
+      </div>
+      <p>Loading secret word.</p>
+    </div>
+  ) : (
     <div data-test="app-component" className="App">
-      <div />
+      <Input secretWord={state.secretWord} />
     </div>
   );
 };

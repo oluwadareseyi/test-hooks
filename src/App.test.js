@@ -8,25 +8,31 @@ import hookActions from "./actions/hookActions";
 const mockGetSecretWord = jest.fn();
 /**
  * @function setup
- * @param  {Object} initialState={} - The initial state we would like to test with.
- * @returns {ShallowWrapper} - THe component wrapper.
+ * @param {String} secretWord="party" - The desired secretWordState we want to test with.
+ * @returns {ReactWrapper} - THe component wrapper.
  */
-const setup = (initialState = {}) => {
+const setup = (secretWord) => {
   // clear the mock function before any call to make sure we don't have a mock already running.
   mockGetSecretWord.mockClear();
 
   // replace the getSecretWord action with the mock.
   hookActions.getSecretWord = mockGetSecretWord;
 
+  // we mock the useReducer hook to have the secretWord as part of our test. Remeber thet useReducer returns an array with the state and a dispatch function. So we mock the return value with an array of those items.
+  const mockUseReducer = jest.fn().mockReturnValue([{ secretWord }, jest.fn()]);
+
+  // Replace the component's useReducer function with our mock.
+  React.useReducer = mockUseReducer;
+
   // use mount instead of shallow iuntil enzyme fixes the issue of useEffect not running on shallow     render.
   // https://github.com/enzymejs/enzyme/issues/2086
-  return mount(<App {...initialState} />);
+  return mount(<App />);
 };
 
 describe("app render", () => {
   test("renders without error", () => {
     const wrapper = setup();
-    checkElement(wrapper, "app-component");
+    checkElement(wrapper, "spinner");
   });
 });
 
@@ -54,5 +60,37 @@ describe("getSecretWord calls", () => {
 
     // mockUseEffect.mockClear();
     // wrapper.setProps();
+  });
+});
+
+describe("secretWord not null", () => {
+  let wrapper;
+
+  beforeEach(() => (wrapper = setup("party")));
+
+  test("renders app when secretWord not null", () => {
+    const appComponent = wrapper.find("[data-test='app-component']");
+    expect(appComponent.exists()).toBe(true);
+  });
+
+  test("does not render spinner when secretWors is not null", () => {
+    const spinnerComponent = wrapper.find("[data-test='spinner']");
+    expect(spinnerComponent.exists()).toBe(false);
+  });
+});
+
+describe("secretWord is null", () => {
+  let wrapper;
+
+  beforeEach(() => (wrapper = setup(null)));
+
+  test("renders spinner when secretWord is null", () => {
+    const spinnerComponent = wrapper.find("[data-test='spinner']");
+    expect(spinnerComponent.exists()).toBe(true);
+  });
+
+  test("does not render App component when secretWord is null", () => {
+    const appComponent = wrapper.find("[data-test='app-component']");
+    expect(appComponent.exists()).toBe(false);
   });
 });
