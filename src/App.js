@@ -44,7 +44,7 @@ const App = () => {
       <p>Loading secret word.</p>
     </div>
   ) : (
-    <div data-test="app-component" className="App">
+    <div data-test="app-component" className="container">
       <Input secretWord={state.secretWord} />
     </div>
   );
